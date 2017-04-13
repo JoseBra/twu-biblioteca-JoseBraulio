@@ -7,11 +7,7 @@ public class UserInteractionAgent {
     Library chosenLibrary;
 
     public void showWelcomeMessage() {
-        System.out.println("Welcome to the new brand Biblioteca System!");
-    }
-
-    public void listAllAvailableBooks(){
-        chosenLibrary.getStoredBooks().forEach(book -> printBookDetailsColumns(book));
+        System.out.print("Welcome to the new brand Biblioteca System!\n");
     }
 
     private void printBookDetailsColumns(Book book){
@@ -20,5 +16,9 @@ public class UserInteractionAgent {
 
     public void setChosenLibrary(Library library){
         this.chosenLibrary = library;
+    }
+
+    public void showMainMenu() {
+        System.out.print("Here is a list of all the available commands:\n");
     }
 }

@@ -8,7 +8,6 @@ import twu.biblioteca.environment.Library;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -36,13 +35,10 @@ public class userInteractionAgentTest {
     }
 
     @Test
-    public void listAllLibraryBooksToUser() throws Exception {
-        ArrayList<Book> bookLibraryList = new ArrayList<Book>();
-        bookLibraryList.add(new Book(1, "1984", "George Orwell", new SimpleDateFormat("dd/MM/yyyy").parse("08/06/1949")));
-        bookLibraryList.add(new Book(2, "Animal Farm", "George Orwell", new SimpleDateFormat("dd/MM/yyyy").parse("17/08/1945")));
-        userInteractionAgent.setChosenLibrary(new Library("LibraryMock", bookLibraryList));
-        userInteractionAgent.listAllAvailableBooks();
-        assertEquals("1     1984                 George Orwell        1949\n" +
-                     "2     Animal Farm          George Orwell        1945", outputStream.toString().trim());
+    public void landUserOnMainMenuWithoutAvailableCommands(){
+        userInteractionAgent.showWelcomeMessage();
+        userInteractionAgent.showMainMenu();
+        assertEquals("Welcome to the new brand Biblioteca System!\n" +
+                        "Here is a list of all the available commands:", outputStream.toString().trim());
     }
 }
