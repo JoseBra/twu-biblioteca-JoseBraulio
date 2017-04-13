@@ -1,5 +1,6 @@
 package twu.biblioteca.environment;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Book {
@@ -29,5 +30,9 @@ public class Book {
 
     public Date getReleaseDate() {
         return releaseDate;
+    }
+
+    public String getReseleaseYear() {
+        return new SimpleDateFormat("yyyy").format(releaseDate);
     }
 }
