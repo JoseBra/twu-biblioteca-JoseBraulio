@@ -16,6 +16,11 @@ public class UserInteractionAgent {
         this.availableCommands = new ArrayList<>();
     }
 
+    public UserInteractionAgent(Library chosenLibrary, List<Command> availableCommands) {
+        this.chosenLibrary = chosenLibrary;
+        this.availableCommands = availableCommands;
+    }
+
     public void showWelcomeMessage() {
         System.out.print("Welcome to the new brand Biblioteca System!\n");
     }
@@ -69,5 +74,11 @@ public class UserInteractionAgent {
 
     private void printStringToUser(String message){
         System.out.println(message);
+    }
+
+    public void startSystem() {
+        showWelcomeMessage();
+        showMainMenu();
+        awaitUserInput();
     }
 }

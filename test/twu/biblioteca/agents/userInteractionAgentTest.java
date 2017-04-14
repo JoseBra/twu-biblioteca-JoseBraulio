@@ -138,8 +138,7 @@ public class userInteractionAgentTest {
         userInteractionAgent.setChosenLibrary(library);
 
         new CheckOutBookCommand().execute(library, "1");
-
-        String inputString = "/listBooks";
+        String inputString = "/listbooks";
         System.setIn(new ByteArrayInputStream(inputString.getBytes()));
         userInteractionAgent.awaitUserInput();
 
