@@ -3,18 +3,17 @@ package twu.biblioteca.commands;
 import twu.biblioteca.environment.Book;
 import twu.biblioteca.environment.Library;
 
-public class ListBookCommand implements Command{
+public class ListBookCommand extends Command{
 
-    @Override
-    public String getUsageExplanation() {
-        return "/listBooks  -  List all available books";
+    public ListBookCommand() {
+        super("/listBooks  -  List all available books");
     }
 
     @Override
-    public String execute(Library library) {
+    public String execute(Library library, String arguments) {
         String printableString = "";
         for (Book book : library.getStoredBooks()){
-            printableString += formatBookDetailsColumns(book);
+            if (!book.isCheckedOut()) printableString += formatBookDetailsColumns(book);
         }
         return printableString;
     }

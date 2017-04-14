@@ -3,6 +3,7 @@ package twu.biblioteca.agents;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import twu.biblioteca.commands.CheckOutBookCommand;
 import twu.biblioteca.commands.Command;
 import twu.biblioteca.commands.ListBookCommand;
 import twu.biblioteca.environment.Book;
@@ -59,6 +60,14 @@ public class userInteractionAgentTest {
     }
 
     @Test
+    public void detectUserInputEmptyLine() throws Exception {
+        String inputString = "";
+        System.setIn(new ByteArrayInputStream(inputString.getBytes()));
+        userInteractionAgent.awaitUserInput();
+        assertTrue(outputStream.toString().contains("Select a valid option!"));
+    }
+
+    @Test
     public void detectUserInputIncorrectCommand() throws Exception {
         String inputString = "none";
         System.setIn(new ByteArrayInputStream(inputString.getBytes()));
@@ -83,5 +92,57 @@ public class userInteractionAgentTest {
 
         assertEquals("1     1984                 George Orwell        1949\n" +
                      "2     Animal Farm          George Orwell        1945", outputStream.toString().trim());
+    }
+
+    @Test
+    public void successfullyCheckOutBookFromInputLine() throws Exception {
+        List<Command> availableCommands = new ArrayList<Command>();
+        availableCommands.add(new CheckOutBookCommand());
+        userInteractionAgent.setAvailableCommands(availableCommands);
+
+        ArrayList<Book> bookLibraryList = new ArrayList<Book>();
+        bookLibraryList.add(new Book(1, "1984", "George Orwell", new SimpleDateFormat("dd/MM/yyyy").parse("08/06/1949")));
+        userInteractionAgent.setChosenLibrary(new Library("TestLibrary", bookLibraryList));
+        String inputString = "/checkout 1";
+        System.setIn(new ByteArrayInputStream(inputString.getBytes()));
+        userInteractionAgent.awaitUserInput();
+
+        assertEquals("Thank you! Enjoy the book.", outputStream.toString().trim());
+    }
+
+    @Test
+    public void unsuccessfullyCheckOutBookFromInputLine() throws Exception {
+        List<Command> availableCommands = new ArrayList<Command>();
+        availableCommands.add(new CheckOutBookCommand());
+        userInteractionAgent.setAvailableCommands(availableCommands);
+
+        userInteractionAgent.setChosenLibrary(new Library("TestLibrary", new ArrayList<Book>()));
+        String inputString = "/checkout 1";
+        System.setIn(new ByteArrayInputStream(inputString.getBytes()));
+        userInteractionAgent.awaitUserInput();
+
+        assertEquals("That book is not available.", outputStream.toString().trim());
+    }
+
+    @Test
+    public void dontListCheckedOutBooks() throws Exception {
+        List<Command> availableCommands = new ArrayList<Command>();
+        availableCommands.add(new ListBookCommand());
+        availableCommands.add(new CheckOutBookCommand());
+        userInteractionAgent.setAvailableCommands(availableCommands);
+
+        ArrayList<Book> bookLibraryList = new ArrayList<Book>();
+        bookLibraryList.add(new Book(1, "1984", "George Orwell", new SimpleDateFormat("dd/MM/yyyy").parse("08/06/1949")));
+        bookLibraryList.add(new Book(2, "Animal Farm", "George Orwell", new SimpleDateFormat("dd/MM/yyyy").parse("17/08/1945")));
+        Library library = new Library("TestLibrary", bookLibraryList);
+        userInteractionAgent.setChosenLibrary(library);
+
+        new CheckOutBookCommand().execute(library, "1");
+
+        String inputString = "/listBooks";
+        System.setIn(new ByteArrayInputStream(inputString.getBytes()));
+        userInteractionAgent.awaitUserInput();
+
+        assertEquals("2     Animal Farm          George Orwell        1945", outputStream.toString().trim());
     }
 }

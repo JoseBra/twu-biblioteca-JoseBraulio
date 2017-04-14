@@ -8,6 +8,7 @@ public class Book {
     private String title;
     private String author;
     private Date releaseDate;
+    private boolean checkedOut;
 
     public Book(int ISBN, String title, String author, Date releaseDate) {
         this.ISBN = ISBN;
@@ -35,4 +36,8 @@ public class Book {
     public String getReseleaseYear() {
         return new SimpleDateFormat("yyyy").format(releaseDate);
     }
+
+    public boolean isCheckedOut() { return checkedOut; }
+
+    public void setCheckedOut(boolean checkedOut) { this.checkedOut = checkedOut; }
 }
