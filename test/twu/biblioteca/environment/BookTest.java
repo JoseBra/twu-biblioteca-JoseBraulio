@@ -19,7 +19,7 @@ public class BookTest {
 
     @Test
     public void getReleaseYearFromBook() throws Exception {
-        Book book = new Book(123, "1984", "George Orwell", new SimpleDateFormat("dd/MM/YYYY").parse("08/06/1949"));
+        Book book = new Book(123, "1984", "George Orwell", new SimpleDateFormat("dd/MM/yyyy").parse("08/06/1949"));
         assertEquals("1949", book.getReseleaseYear());
     }
 }
