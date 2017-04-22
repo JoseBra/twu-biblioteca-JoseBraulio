@@ -2,18 +2,22 @@ package twu.biblioteca.commands;
 
 import twu.biblioteca.environment.Book;
 import twu.biblioteca.environment.Library;
+import twu.biblioteca.environment.LibraryItem;
 
-public class CheckOutBookCommand extends Command{
+public class CheckOutLibraryItem extends Command{
 
-    public CheckOutBookCommand() {
+    public CheckOutLibraryItem() {
         super("/checkout [ISBN code]  -  Checks out the book with it's ISBN Code.");
     }
 
     @Override
     public String execute(Library library, String arguments) {
-        for (Book book : library.getStoredBooks()){
-            if (book.getISBN() == Integer.valueOf(arguments)){
-                return checkOutBook(book) ? "Thank you! Enjoy the book." : "That book is not available";
+        for (LibraryItem libraryItem : library.getLibraryItems()){
+            if (libraryItem instanceof Book && libraryItem.getISBN() == Integer.valueOf(arguments)){
+
+            }
+            if (libraryItem.getISBN() == Integer.valueOf(arguments)){
+                return checkOutBook(libraryItem) ? "Thank you! Enjoy the book." : "That book is not available";
             }
         }
         return "That book is not available.";

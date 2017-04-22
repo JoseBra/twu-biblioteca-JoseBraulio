@@ -11,7 +11,7 @@ public class ReturnBookCommand extends Command{
 
     @Override
     public String execute(Library library, String arguments) {
-        for (Book book : library.getStoredBooks()){
+        for (Book book : library.getLibraryItems()){
             if (book.getISBN() == Integer.valueOf(arguments)){
                 return returnBook(book) ? "Thank you for returning the book." : "That is not a valid book to return.";
             }

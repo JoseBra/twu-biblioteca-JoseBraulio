@@ -1,7 +1,7 @@
 package twu.biblioteca.agents;
 
 import org.junit.Test;
-import twu.biblioteca.commands.CheckOutBookCommand;
+import twu.biblioteca.commands.CheckOutLibraryItem;
 import twu.biblioteca.commands.ListBookCommand;
 
 import static org.junit.Assert.assertEquals;
@@ -22,6 +22,6 @@ public class consoleInputParserTest {
     @Test
     public void detectCheckOutBookFromInput() throws Exception {
         Class enumCommandClass = ConsoleInputParser.getCommandClassFromString("/checkout");
-        assertEquals(CheckOutBookCommand.class, enumCommandClass);
+        assertEquals(CheckOutLibraryItem.class, enumCommandClass);
     }
 }

@@ -3,6 +3,7 @@ package twu.biblioteca.commands;
 import org.junit.Test;
 import twu.biblioteca.environment.Book;
 import twu.biblioteca.environment.Library;
+import twu.biblioteca.environment.Movie;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,26 +36,26 @@ public class CommandsTest {
 
     @Test
     public void checkOutBookCommandExplanatoryUsage() throws Exception {
-        CheckOutBookCommand checkOutBookCommand = new CheckOutBookCommand();
-        assertEquals("/checkout [ISBN code]  -  Checks out the book with it's ISBN Code.", checkOutBookCommand.getUsageExplanation());
+        CheckOutLibraryItem checkOutLibraryItem = new CheckOutLibraryItem();
+        assertEquals("/checkout [ISBN code]  -  Checks out the book with it's ISBN Code.", checkOutLibraryItem.getUsageExplanation());
     }
 
     @Test
     public void checkOutBookCommandSuccessfullyExecuted() throws Exception {
-        CheckOutBookCommand checkOutBookCommand = new CheckOutBookCommand();
+        CheckOutLibraryItem checkOutLibraryItem = new CheckOutLibraryItem();
         ArrayList<Book> bookLibraryList = new ArrayList<Book>();
         bookLibraryList.add(new Book(1, "1984", "George Orwell", new SimpleDateFormat("dd/MM/yyyy").parse("08/06/1949")));
         Library library = new Library("LibraryMock", bookLibraryList);
 
-        assertEquals("Thank you! Enjoy the book.", checkOutBookCommand.execute(library, Integer.toString(1)));
+        assertEquals("Thank you! Enjoy the book.", checkOutLibraryItem.execute(library, Integer.toString(1)));
     }
 
     @Test
     public void checkOutBookCommandUnsuccessfullyExecuted() throws Exception{
-        CheckOutBookCommand checkOutBookCommand = new CheckOutBookCommand();
+        CheckOutLibraryItem checkOutLibraryItem = new CheckOutLibraryItem();
         Library library = new Library("LibraryMock", new ArrayList<>());
 
-        assertEquals("That book is not available.", checkOutBookCommand.execute(library, Integer.toString(1)));
+        assertEquals("That book is not available.", checkOutLibraryItem.execute(library, Integer.toString(1)));
     }
 
     @Test
@@ -66,12 +67,12 @@ public class CommandsTest {
     @Test
     public void returnBookCommandSuccessfullyExecuted() throws Exception {
         ReturnBookCommand returnBookCommand = new ReturnBookCommand();
-        CheckOutBookCommand checkOutBookCommand = new CheckOutBookCommand();
+        CheckOutLibraryItem checkOutLibraryItem = new CheckOutLibraryItem();
         ArrayList<Book> bookLibraryList = new ArrayList<Book>();
         bookLibraryList.add(new Book(1, "1984", "George Orwell", new SimpleDateFormat("dd/MM/yyyy").parse("08/06/1949")));
         Library library = new Library("LibraryMock", bookLibraryList);
 
-        checkOutBookCommand.execute(library, "1");
+        checkOutLibraryItem.execute(library, "1");
 
         assertEquals("Thank you for returning the book.", returnBookCommand.execute(library, "1"));
     }
@@ -82,5 +83,17 @@ public class CommandsTest {
         Library library = new Library("LibraryMock",  new ArrayList<Book>());
 
         assertEquals("That is not a valid book to return.", returnBookCommand.execute(library, "1"));
+    }
+
+    @Test
+    public void listMoviesCommandExecute() throws Exception {
+        ListMovieCommand listMovieCommand = new ListMovieCommand();
+        ArrayList<Movie> moviesList = new ArrayList<>();
+        moviesList.add(new Movie(1, "The Last Samurai", new SimpleDateFormat("dd/MM/yyyy").parse("08/06/1949"), "George Petter", 2.3));
+        moviesList.add(new Movie(2, "The Truman Show", new SimpleDateFormat("dd/MM/yyyy").parse("30/08/1998"), "Peter Weir", null));
+
+        assertEquals("1     The Last Samurai                 George Petter        1949        2.3\n" +
+                    "2     The Truman Show          Peter Weir        1998        Unrated", listMovieCommand.execute(new Library("LibraryMock", moviesList), "").trim());
+
     }
 }

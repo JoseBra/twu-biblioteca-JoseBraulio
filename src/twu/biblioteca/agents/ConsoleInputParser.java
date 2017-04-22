@@ -4,7 +4,7 @@ import twu.biblioteca.commands.*;
 
 public enum ConsoleInputParser {
     LIST_BOOKS("/listBooks", ListBookCommand.class),
-    CHECKOUT_BOOK("/checkout", CheckOutBookCommand.class),
+    CHECKOUT_BOOK("/checkout", CheckOutLibraryItem.class),
     QUIT("/quit",QuitCommand.class),
     RETURN_BOOK("/return", ReturnBookCommand.class);
 

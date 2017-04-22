@@ -3,7 +3,7 @@ package twu.biblioteca.agents;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import twu.biblioteca.commands.CheckOutBookCommand;
+import twu.biblioteca.commands.CheckOutLibraryItem;
 import twu.biblioteca.commands.Command;
 import twu.biblioteca.commands.ListBookCommand;
 import twu.biblioteca.environment.Book;
@@ -97,7 +97,7 @@ public class userInteractionAgentTest {
     @Test
     public void successfullyCheckOutBookFromInputLine() throws Exception {
         List<Command> availableCommands = new ArrayList<Command>();
-        availableCommands.add(new CheckOutBookCommand());
+        availableCommands.add(new CheckOutLibraryItem());
         userInteractionAgent.setAvailableCommands(availableCommands);
 
         ArrayList<Book> bookLibraryList = new ArrayList<Book>();
@@ -113,7 +113,7 @@ public class userInteractionAgentTest {
     @Test
     public void unsuccessfullyCheckOutBookFromInputLine() throws Exception {
         List<Command> availableCommands = new ArrayList<Command>();
-        availableCommands.add(new CheckOutBookCommand());
+        availableCommands.add(new CheckOutLibraryItem());
         userInteractionAgent.setAvailableCommands(availableCommands);
 
         userInteractionAgent.setChosenLibrary(new Library("TestLibrary", new ArrayList<Book>()));
@@ -128,7 +128,7 @@ public class userInteractionAgentTest {
     public void dontListCheckedOutBooks() throws Exception {
         List<Command> availableCommands = new ArrayList<Command>();
         availableCommands.add(new ListBookCommand());
-        availableCommands.add(new CheckOutBookCommand());
+        availableCommands.add(new CheckOutLibraryItem());
         userInteractionAgent.setAvailableCommands(availableCommands);
 
         ArrayList<Book> bookLibraryList = new ArrayList<Book>();
@@ -137,7 +137,7 @@ public class userInteractionAgentTest {
         Library library = new Library("TestLibrary", bookLibraryList);
         userInteractionAgent.setChosenLibrary(library);
 
-        new CheckOutBookCommand().execute(library, "1");
+        new CheckOutLibraryItem().execute(library, "1");
         String inputString = "/listbooks";
         System.setIn(new ByteArrayInputStream(inputString.getBytes()));
         userInteractionAgent.awaitUserInput();

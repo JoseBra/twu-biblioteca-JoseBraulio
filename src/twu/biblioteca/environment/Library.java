@@ -1,23 +1,22 @@
 package twu.biblioteca.environment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Library {
 
     private String name;
-    private List<Book> storedBooks;
+    private List<LibraryItem> libraryItems;
 
-    public Library(String name, List<Book> storedBooks) {
+    public Library(String name, List<LibraryItem> libraryItems) {
         this.name = name;
-        this.storedBooks = storedBooks;
+        this.libraryItems = libraryItems;
     }
 
     public String getName() {
         return name;
     }
 
-    public List<Book> getStoredBooks() {
-        return storedBooks;
+    public List<LibraryItem> getLibraryItems() {
+        return libraryItems;
     }
 }
