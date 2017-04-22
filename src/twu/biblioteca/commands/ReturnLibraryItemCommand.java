@@ -19,8 +19,8 @@ public class ReturnLibraryItemCommand extends Command{
                                         .stream()
                                         .filter(li -> li.getClass().equals(targetClass) && li.isCheckedOut())
                                         .collect(Collectors.toList())){
-            if (libraryItem.getClass().equals(Book.class) && ((Book)libraryItem).getISBN() == Integer.valueOf(arguments)
-                    || libraryItem.getClass().equals(Movie.class) && ((Movie)libraryItem).getMovieID() == Integer.valueOf(arguments)) return returnLibraryItem(libraryItem);
+            if (libraryItem.getClass().equals(Book.class) && ((Book)libraryItem).getISBN() == Integer.valueOf(arguments))  return returnLibraryItem(libraryItem);
+            else if (libraryItem.getClass().equals(Movie.class) && ((Movie)libraryItem).getMovieID() == Integer.valueOf(arguments)) return returnLibraryItem(libraryItem);
         }
         return messageItemNotReturned(targetClass);
     }
