@@ -236,4 +236,31 @@ public class userInteractionAgentTest {
         userInteractionAgent.showMainMenu();
         assertTrue(outputStream.toString().contains("whoCheckedBook"));
     }
+
+    @Test
+    public void showUserProfileFromInput() throws Exception {
+        List<Command> availableCommands = new ArrayList<>();
+        availableCommands.add(new ShowUserProfileCommand());
+        userInteractionAgent.setAvailableCommands(availableCommands);
+
+
+        LoginUserManager.getInstance().logout();
+        outputStream.reset();
+        String inputString = "/showProfile";
+        System.setIn(new ByteArrayInputStream(inputString.getBytes()));
+        userInteractionAgent.awaitUserInput();
+
+        assertEquals("You must be logged to get your profile details.", outputStream.toString().trim());
+
+        ArrayList<User> users = new ArrayList<>();
+        User testingUser = new User("123-1234", "123", new UserProfile("Jose","","",""), null);
+        users.add(testingUser);
+        LoginUserManager.getInstance().setRegisteredUsers(users);
+
+        LoginUserManager.getInstance().login("123-1234", "123");
+        outputStream.reset();
+        System.setIn(new ByteArrayInputStream(inputString.getBytes()));
+        userInteractionAgent.awaitUserInput();
+        assertTrue(outputStream.toString().contains(LoginUserManager.getInstance().getLoggedUser().getUserProfile().getName()));
+    }
 }

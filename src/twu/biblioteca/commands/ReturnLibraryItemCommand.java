@@ -27,13 +27,18 @@ public class ReturnLibraryItemCommand extends Command{
 
     private String returnLibraryItem(LibraryItem libraryItem) {
         if (!libraryItem.isCheckedOut()) return messageItemNotReturned(libraryItem.getClass());
-        libraryItem.setCheckedOut(false);
+        if (!LoginUserManager.getInstance().getLoggedUser().didCheckoutThisItem(libraryItem)) return messageUserDidntCheckoutThisItem();
         try {
             LoginUserManager.getInstance().getLoggedUser().removeCheckedOutLibraryItem(libraryItem);
+            libraryItem.setCheckedOut(false);
         } catch (Exception e) {
             return "You must be logged in order to return items.";
         }
         return messageItemReturned(libraryItem.getClass());
+    }
+
+    private String messageUserDidntCheckoutThisItem() {
+        return "You didn't checkout this item, you can't return it.";
     }
 
     private String messageItemNotReturned(Class libraryItemClass){

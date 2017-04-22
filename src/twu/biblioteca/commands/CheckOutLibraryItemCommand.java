@@ -28,9 +28,9 @@ public class CheckOutLibraryItemCommand extends Command{
 
     private String checkOutLibraryItem(LibraryItem libraryItem) {
         if (libraryItem.isCheckedOut()) return messageItemNotAvailable(libraryItem.getClass());
-        libraryItem.setCheckedOut(true);
         try {
             LoginUserManager.getInstance().getLoggedUser().addCheckedOutLibraryItem(libraryItem);
+            libraryItem.setCheckedOut(true);
         } catch (Exception e) {
             return "You must be logged in order to check out items.";
         }

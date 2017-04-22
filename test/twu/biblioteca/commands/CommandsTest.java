@@ -22,7 +22,7 @@ public class CommandsTest {
         ArrayList<User> registeredUsers = new ArrayList<>();
         ArrayList<UserRole> userRoles = new ArrayList<>();
         userRoles.add(UserRole.CUSTOMER);
-        registeredUsers.add(new User("123-1234", "123", new UserProfile(),userRoles));
+        registeredUsers.add(new User("123-1234", "123", new UserProfile("Jose", "123@123.com", "Fake St. 123", "123456789"),userRoles));
         loginUserManager.setRegisteredUsers(registeredUsers);
         loginUserManager.login("123-1234", "123");
     }
@@ -60,5 +60,13 @@ public class CommandsTest {
 
         checkOutLibraryItemCommand.execute(library, "1", Book.class);
         assertEquals("123-1234", whoCheckedItemCommand.execute(library, "1", Book.class));
+    }
+
+    @Test
+    public void showUserProfileDetails() throws Exception {
+        ShowUserProfileCommand showUserProfileCommand = new ShowUserProfileCommand();
+        loginUserManager.login("123-1234", "123");
+
+        assertTrue(showUserProfileCommand.execute(null, "", null).contains("Jose"));
     }
 }
