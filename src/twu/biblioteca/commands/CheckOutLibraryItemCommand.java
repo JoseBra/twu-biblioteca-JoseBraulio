@@ -1,5 +1,6 @@
 package twu.biblioteca.commands;
 
+import twu.biblioteca.agents.LoginUserManager;
 import twu.biblioteca.environment.Book;
 import twu.biblioteca.environment.Library;
 import twu.biblioteca.environment.LibraryItem;
@@ -28,6 +29,11 @@ public class CheckOutLibraryItemCommand extends Command{
     private String checkOutLibraryItem(LibraryItem libraryItem) {
         if (libraryItem.isCheckedOut()) return messageItemNotAvailable(libraryItem.getClass());
         libraryItem.setCheckedOut(true);
+        try {
+            LoginUserManager.getInstance().getLoggedUser().addCheckedOutLibraryItem(libraryItem);
+        } catch (Exception e) {
+            return "You must be logged in order to check out items.";
+        }
         return messageItemCheckedOut(libraryItem.getClass());
     }
 

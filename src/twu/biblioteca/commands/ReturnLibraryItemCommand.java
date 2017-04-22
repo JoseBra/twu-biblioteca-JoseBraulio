@@ -1,5 +1,6 @@
 package twu.biblioteca.commands;
 
+import twu.biblioteca.agents.LoginUserManager;
 import twu.biblioteca.environment.Book;
 import twu.biblioteca.environment.Library;
 import twu.biblioteca.environment.LibraryItem;
@@ -28,6 +29,11 @@ public class ReturnLibraryItemCommand extends Command{
     private String returnLibraryItem(LibraryItem libraryItem) {
         if (!libraryItem.isCheckedOut()) return messageItemNotReturned(libraryItem.getClass());
         libraryItem.setCheckedOut(false);
+        try {
+            LoginUserManager.getInstance().getLoggedUser().removeCheckedOutLibraryItem(libraryItem);
+        } catch (Exception e) {
+            return "You must be logged in order to return items.";
+        }
         return messageItemReturned(libraryItem.getClass());
     }
 

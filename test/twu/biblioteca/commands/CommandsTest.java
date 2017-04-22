@@ -1,5 +1,6 @@
 package twu.biblioteca.commands;
 
+import org.junit.Before;
 import org.junit.Test;
 import twu.biblioteca.agents.LoginUserManager;
 import twu.biblioteca.environment.*;
@@ -9,8 +10,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CommandsTest {
+    LoginUserManager loginUserManager;
+
+    @Before
+    public void setUp() throws Exception {
+        loginUserManager = LoginUserManager.getInstance();
+
+        ArrayList<User> registeredUsers = new ArrayList<>();
+        registeredUsers.add(new User("123-1234", "123", new UserProfile()));
+        loginUserManager.setRegisteredUsers(registeredUsers);
+        loginUserManager.login("123-1234", "123");
+    }
 
     @Test
     public void listItemCommandGetExplanatoryUsage() throws Exception {
@@ -126,15 +139,39 @@ public class CommandsTest {
     public void loginUserCommandExecutesCorrectly() throws Exception {
         LoginUserCommand loginUserCommand = new LoginUserCommand();
 
-        LoginUserManager loginUserManager = LoginUserManager.getInstance();
-        ArrayList<User> registeredUsers = new ArrayList<>();
-        registeredUsers.add(new User("123-1234", "123", new UserProfile()));
-        loginUserManager.setRegisteredUsers(registeredUsers);
-
         System.setIn(new ByteArrayInputStream("1234".getBytes()));
         assertEquals("Sorry, we don't recognize these credentials.", loginUserCommand.execute(null, "123-1234", null));
 
         System.setIn(new ByteArrayInputStream("123".getBytes()));
         assertEquals("Welcome to your Biblioteca!.", loginUserCommand.execute(null, "123-1234", null));
+    }
+
+    @Test
+    public void registerCheckedOutItemOnUser() throws Exception {
+        CheckOutLibraryItemCommand checkOutLibraryItemCommand = new CheckOutLibraryItemCommand();
+        ArrayList<LibraryItem> bookLibraryList = new ArrayList<>();
+        bookLibraryList.add(new Book(1, "1984", "George Orwell", new SimpleDateFormat("dd/MM/yyyy").parse("08/06/1949")));
+        Library library = new Library("LibraryMock", bookLibraryList);
+        loginUserManager.login("123-1234", "123");
+
+        checkOutLibraryItemCommand.execute(library, "1", Book.class);
+        assertEquals(loginUserManager.getLoggedUser().getCheckedOutItems().size(), 1);
+
+    }
+
+    @Test
+    public void registerUserReturnItem() throws Exception {
+        CheckOutLibraryItemCommand checkOutLibraryItemCommand = new CheckOutLibraryItemCommand();
+        ReturnLibraryItemCommand returnLibraryItemCommand = new ReturnLibraryItemCommand();
+        ArrayList<LibraryItem> bookLibraryList = new ArrayList<>();
+        bookLibraryList.add(new Book(1, "1984", "George Orwell", new SimpleDateFormat("dd/MM/yyyy").parse("08/06/1949")));
+        bookLibraryList.add(new Book(2, "1984", "George Orwell", new SimpleDateFormat("dd/MM/yyyy").parse("08/06/1949")));
+        Library library = new Library("LibraryMock", bookLibraryList);
+        loginUserManager.login("123-1234", "123");
+
+        checkOutLibraryItemCommand.execute(library, "1", Book.class);
+        checkOutLibraryItemCommand.execute(library, "2", Book.class);
+        returnLibraryItemCommand.execute(library, "1", Book.class);
+        assertEquals(loginUserManager.getLoggedUser().getCheckedOutItems().size(), 1);
     }
 }
