@@ -7,11 +7,11 @@ import twu.biblioteca.environment.Movie;
 
 import java.util.stream.Collectors;
 
-public class CheckOutLibraryItem extends Command{
+public class CheckOutLibraryItemCommand extends Command{
 
-    public CheckOutLibraryItem() {
+    public CheckOutLibraryItemCommand() {
         super("/checkoutBook [ISBN code]  -  Checks out the book with it's ISBN Code.\n" +
-                "\t/checkoutMovie [MovieID code]  -  Checks out the movie with it's ID Code.");
+                "\t/checkoutMovie [MovieID code]  -  Checks out the movie with it's ID Code.", true);
     }
 
     @Override

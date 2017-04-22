@@ -11,7 +11,7 @@ public class ReturnLibraryItemCommand extends Command{
 
     public ReturnLibraryItemCommand() {
         super("/return [ISBN code]  -  Returns the book with it's ISBN Code so it's available again.\n" +
-                "\t/return [MovieID code]  -  Returns the movie with it's Movie ID Code so it's available again.");
+                "\t/return [MovieID code]  -  Returns the movie with it's Movie ID Code so it's available again.", true);
     }
 
     @Override

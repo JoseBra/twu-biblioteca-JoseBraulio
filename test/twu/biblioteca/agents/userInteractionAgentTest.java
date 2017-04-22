@@ -3,9 +3,10 @@ package twu.biblioteca.agents;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import twu.biblioteca.commands.CheckOutLibraryItem;
+import twu.biblioteca.commands.CheckOutLibraryItemCommand;
 import twu.biblioteca.commands.Command;
 import twu.biblioteca.commands.ListLibraryItemCommand;
+import twu.biblioteca.commands.LoginUserCommand;
 import twu.biblioteca.environment.Book;
 import twu.biblioteca.environment.Library;
 import twu.biblioteca.environment.LibraryItem;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class userInteractionAgentTest {
@@ -100,7 +102,7 @@ public class userInteractionAgentTest {
     @Test
     public void successfullyCheckOutBookFromInputLine() throws Exception {
         List<Command> availableCommands = new ArrayList<Command>();
-        availableCommands.add(new CheckOutLibraryItem());
+        availableCommands.add(new CheckOutLibraryItemCommand());
         userInteractionAgent.setAvailableCommands(availableCommands);
 
         ArrayList<LibraryItem> bookLibraryList = new ArrayList<>();
@@ -116,7 +118,7 @@ public class userInteractionAgentTest {
     @Test
     public void unsuccessfullyCheckOutBookFromInputLine() throws Exception {
         List<Command> availableCommands = new ArrayList<Command>();
-        availableCommands.add(new CheckOutLibraryItem());
+        availableCommands.add(new CheckOutLibraryItemCommand());
         userInteractionAgent.setAvailableCommands(availableCommands);
 
         userInteractionAgent.setChosenLibrary(new Library("TestLibrary", new ArrayList<LibraryItem>()));
@@ -131,7 +133,7 @@ public class userInteractionAgentTest {
     public void dontListCheckedOutBooks() throws Exception {
         List<Command> availableCommands = new ArrayList<Command>();
         availableCommands.add(new ListLibraryItemCommand());
-        availableCommands.add(new CheckOutLibraryItem());
+        availableCommands.add(new CheckOutLibraryItemCommand());
         userInteractionAgent.setAvailableCommands(availableCommands);
 
         ArrayList<LibraryItem> bookLibraryList = new ArrayList<>();
@@ -140,7 +142,7 @@ public class userInteractionAgentTest {
         Library library = new Library("TestLibrary", bookLibraryList);
         userInteractionAgent.setChosenLibrary(library);
 
-        new CheckOutLibraryItem().execute(library, "1", Book.class);
+        new CheckOutLibraryItemCommand().execute(library, "1", Book.class);
         String inputString = "/listbooks";
         System.setIn(new ByteArrayInputStream(inputString.getBytes()));
         userInteractionAgent.awaitUserInput();
@@ -163,5 +165,40 @@ public class userInteractionAgentTest {
         userInteractionAgent.awaitUserInput();
 
         assertEquals("2     The Truman Show      Peter Weir           1998     Unrated", outputStream.toString().trim());
+    }
+
+    @Test
+    public void checkOutMovieUserInput() throws Exception {
+        List<Command> availableCommands = new ArrayList<Command>();
+        availableCommands.add(new CheckOutLibraryItemCommand());
+        userInteractionAgent.setAvailableCommands(availableCommands);
+
+        ArrayList<LibraryItem> movieList = new ArrayList<>();
+        movieList.add(new Movie(1, "The Truman Show", new SimpleDateFormat("dd/MM/yyyy").parse("30/08/1998"), "Peter Weir", null));
+        userInteractionAgent.setChosenLibrary(new Library("TestLibrary", movieList));
+        String inputString = "/checkoutMovie 1";
+        System.setIn(new ByteArrayInputStream(inputString.getBytes()));
+        userInteractionAgent.awaitUserInput();
+
+        assertEquals("Thank you! Enjoy the movie.", outputStream.toString().trim());
+
+        outputStream.reset();
+        System.setIn(new ByteArrayInputStream(inputString.getBytes()));
+        userInteractionAgent.awaitUserInput();
+        assertEquals("That movie is not available", outputStream.toString().trim());
+    }
+
+    @Test
+    public void hideCommandsThatRequireLogin(){
+        List<Command> availableCommands = new ArrayList<Command>();
+        availableCommands.add(new CheckOutLibraryItemCommand());
+        availableCommands.add(new ListLibraryItemCommand());
+        availableCommands.add(new LoginUserCommand());
+        userInteractionAgent.setAvailableCommands(availableCommands);
+
+        LoginUserManager.getInstance().logout();
+        outputStream.reset();
+        userInteractionAgent.showMainMenu();
+        assertFalse(outputStream.toString().contains("checkout"));
     }
 }

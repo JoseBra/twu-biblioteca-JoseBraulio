@@ -10,9 +10,11 @@ import java.util.Map;
 public enum ConsoleInputParser {
     LIST_BOOKS("/listBooks", ListLibraryItemCommand.class, Book.class),
     LIST_MOVIES("/listMovies",ListLibraryItemCommand.class, Movie.class),
-    CHECKOUT_BOOK("/checkoutBook", CheckOutLibraryItem.class, Book.class),
+    CHECKOUT_BOOK("/checkoutBook", CheckOutLibraryItemCommand.class, Book.class),
+    CHECKOUT_MOVIE("/checkoutMovie", CheckOutLibraryItemCommand.class, Movie.class),
+    RETURN_BOOK("/returnBook", ReturnLibraryItemCommand.class, Book.class),
     QUIT("/quit", QuitCommand.class, null),
-    RETURN_BOOK("/returnBook", ReturnLibraryItemCommand.class, Book.class);
+    LOGIN("/login", LoginUserCommand.class, null);
 
     private final String value;
     private final Map.Entry<Class, Class> commandAndTargetClass;

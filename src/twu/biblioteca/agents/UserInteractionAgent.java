@@ -2,20 +2,24 @@ package twu.biblioteca.agents;
 
 import twu.biblioteca.commands.Command;
 import twu.biblioteca.environment.Library;
+import twu.biblioteca.environment.User;
 
 import java.util.*;
 
 public class UserInteractionAgent {
     private Library chosenLibrary;
     private List<Command> availableCommands;
+    private LoginUserManager loginUserManager;
 
     public UserInteractionAgent() {
+        this.loginUserManager = LoginUserManager.getInstance();
         this.availableCommands = new ArrayList<>();
     }
 
     public UserInteractionAgent(Library chosenLibrary, List<Command> availableCommands) {
         this.chosenLibrary = chosenLibrary;
         this.availableCommands = availableCommands;
+        this.loginUserManager = LoginUserManager.getInstance();
     }
 
     public void showWelcomeMessage() {
@@ -24,7 +28,8 @@ public class UserInteractionAgent {
 
     public void showMainMenu() {
         System.out.print("Here is a list of all the available commands:\n");
-        availableCommands.forEach(command -> System.out.println("\t" + command.getUsageExplanation()));
+        availableCommands.stream().filter(command -> !command.isRequireLogin() || command.isRequireLogin() && loginUserManager.isUserLogged())
+                                    .forEach(command -> System.out.println("\t" + command.getUsageExplanation()));
     }
 
     public void setAvailableCommands(List<Command> availableCommands) {

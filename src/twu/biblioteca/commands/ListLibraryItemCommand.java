@@ -11,7 +11,7 @@ public class ListLibraryItemCommand extends Command{
 
     public ListLibraryItemCommand() {
         super("/listBooks  -  List all available books.\n" +
-                "\t/listMovies - List all available movies.");
+                "\t/listMovies - List all available movies.", false);
     }
 
     @Override

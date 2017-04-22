@@ -37,9 +37,10 @@ public class BibliotecaMain {
     private static List<Command> createAvailableCommandsList(){
         List<Command> availableCommands = new ArrayList<Command>();
         availableCommands.add(new ListLibraryItemCommand());
-        availableCommands.add(new CheckOutLibraryItem());
+        availableCommands.add(new CheckOutLibraryItemCommand());
         availableCommands.add(new ReturnLibraryItemCommand());
         availableCommands.add(new QuitCommand());
+        availableCommands.add(new LoginUserCommand());
         return availableCommands;
     }
 

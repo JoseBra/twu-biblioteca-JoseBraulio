@@ -5,7 +5,7 @@ import twu.biblioteca.environment.Library;
 public class QuitCommand extends Command{
 
     public QuitCommand() {
-        super("/quit  -  Close Biblioteca system.");
+        super("/quit  -  Close Biblioteca system.", false);
     }
 
     @Override
