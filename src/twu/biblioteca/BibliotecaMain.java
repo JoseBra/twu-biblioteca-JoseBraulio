@@ -4,6 +4,7 @@ import twu.biblioteca.agents.UserInteractionAgent;
 import twu.biblioteca.commands.*;
 import twu.biblioteca.environment.Book;
 import twu.biblioteca.environment.Library;
+import twu.biblioteca.environment.LibraryItem;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,15 +36,15 @@ public class BibliotecaMain {
 
     private static List<Command> createAvailableCommandsList(){
         List<Command> availableCommands = new ArrayList<Command>();
-        availableCommands.add(new ListBookCommand());
+        availableCommands.add(new ListLibraryItemCommand());
         availableCommands.add(new CheckOutLibraryItem());
-        availableCommands.add(new ReturnBookCommand());
+        availableCommands.add(new ReturnLibraryItemCommand());
         availableCommands.add(new QuitCommand());
         return availableCommands;
     }
 
     private static Library initializeLibrary() throws ParseException {
-        ArrayList<Book> bookLibraryList = new ArrayList<Book>();
+        ArrayList<LibraryItem> bookLibraryList = new ArrayList<>();
         bookLibraryList.add(new Book(1, "1984", "George Orwell", new SimpleDateFormat("dd/MM/yyyy").parse("08/06/1949")));
         bookLibraryList.add(new Book(2, "Animal Farm", "George Orwell", new SimpleDateFormat("dd/MM/yyyy").parse("17/08/1945")));
         return new Library("Bangalore Public Library", bookLibraryList);

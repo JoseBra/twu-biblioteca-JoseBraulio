@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by josebraulio on 22/04/2017.
  */
-public class LibraryItem {
+public abstract class LibraryItem {
     protected String title;
     protected String creator;
     protected Date releaseDate;

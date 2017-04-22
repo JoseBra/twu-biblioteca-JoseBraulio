@@ -13,5 +13,5 @@ public abstract class Command {
         return usageExplanation;
     };
 
-    public abstract String execute(Library library, String arguments);
+    public abstract String execute(Library library, String arguments, Class targetClass);
 }

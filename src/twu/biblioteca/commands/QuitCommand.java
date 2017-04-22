@@ -9,7 +9,7 @@ public class QuitCommand extends Command{
     }
 
     @Override
-    public String execute(Library library, String arguments) {
+    public String execute(Library library, String arguments, Class targetClass) {
         System.exit(0);
         return "Goodbye!";
     }

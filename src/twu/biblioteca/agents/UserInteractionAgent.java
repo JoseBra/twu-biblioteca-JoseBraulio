@@ -3,10 +3,7 @@ package twu.biblioteca.agents;
 import twu.biblioteca.commands.Command;
 import twu.biblioteca.environment.Library;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class UserInteractionAgent {
     private Library chosenLibrary;
@@ -37,16 +34,12 @@ public class UserInteractionAgent {
         this.chosenLibrary = library;
     }
 
-    public List<Command> getAvailableCommands() {
-        return availableCommands;
-    }
-
     public void awaitUserInput() {
         List<String> parsedUserInput = new ArrayList<>();
         try{
             parsedUserInput = extractCommandAndArgumentsFromInputLine(new Scanner(System.in).nextLine());
-            Class commandClass = ConsoleInputParser.getCommandClassFromString(parsedUserInput.get(0));
-            executeInputChosenCommand(commandClass, parsedUserInput.get(1));
+            Map.Entry<Class, Class> commandAndTargetClass = ConsoleInputParser.getCommandAndTargetClassFromString(parsedUserInput.get(0));
+            executeInputChosenCommand(commandAndTargetClass, parsedUserInput.get(1));
         }catch (Exception e){
             printInvalidOptionMessage();
         }
@@ -58,10 +51,10 @@ public class UserInteractionAgent {
         return parsedLine;
     }
 
-    private void executeInputChosenCommand(Class commandClass, String arguments) {
+    private void executeInputChosenCommand(Map.Entry<Class, Class> commandAndTargetClass, String arguments) {
         for(Command command : availableCommands){
-            if (command.getClass().equals(commandClass)){
-                printStringToUser(command.execute(chosenLibrary, arguments));
+            if (command.getClass().equals(commandAndTargetClass.getKey())){
+                printStringToUser(command.execute(chosenLibrary, arguments, commandAndTargetClass.getValue()));
                 return;
             }
         }

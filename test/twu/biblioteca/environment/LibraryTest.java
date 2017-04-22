@@ -13,7 +13,7 @@ import java.util.List;
 public class LibraryTest {
     @Test
     public void initializeLibrary() throws Exception {
-        Library library = new Library("Bangalore Public Library", new ArrayList<Book>());
+        Library library = new Library("Bangalore Public Library", new ArrayList<LibraryItem>());
         assertEquals(Library.class, library.getClass());
         assertEquals("Bangalore Public Library", library.getName());
     }
