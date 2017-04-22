@@ -28,8 +28,10 @@ public class UserInteractionAgent {
 
     public void showMainMenu() {
         System.out.print("Here is a list of all the available commands:\n");
-        availableCommands.stream().filter(command -> !command.isRequireLogin() || command.isRequireLogin() && loginUserManager.isUserLogged())
-                                    .forEach(command -> System.out.println("\t" + command.getUsageExplanation()));
+        User loggedUser = loginUserManager.getLoggedUser();
+        availableCommands.stream().filter(command -> !command.isRequireLogin() || command.isRequireLogin() && loginUserManager.isUserLogged()
+                                          && loggedUser.getUserRoles().contains(command.getRequiredRole()))
+                                  .forEach(command -> System.out.println("\t" + command.getUsageExplanation()));
     }
 
     public void setAvailableCommands(List<Command> availableCommands) {

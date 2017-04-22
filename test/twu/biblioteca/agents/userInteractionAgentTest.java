@@ -3,14 +3,8 @@ package twu.biblioteca.agents;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import twu.biblioteca.commands.CheckOutLibraryItemCommand;
-import twu.biblioteca.commands.Command;
-import twu.biblioteca.commands.ListLibraryItemCommand;
-import twu.biblioteca.commands.LoginUserCommand;
-import twu.biblioteca.environment.Book;
-import twu.biblioteca.environment.Library;
-import twu.biblioteca.environment.LibraryItem;
-import twu.biblioteca.environment.Movie;
+import twu.biblioteca.commands.*;
+import twu.biblioteca.environment.*;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -200,5 +194,46 @@ public class userInteractionAgentTest {
         outputStream.reset();
         userInteractionAgent.showMainMenu();
         assertFalse(outputStream.toString().contains("checkout"));
+
+        ArrayList<UserRole> userRoles = new ArrayList<>();
+        userRoles.add(UserRole.LIBRARIAN);
+        userRoles.add(UserRole.CUSTOMER);
+        ArrayList<User> users = new ArrayList<>();
+        users.add(new User("123-1234", "123", new UserProfile(), userRoles));
+        LoginUserManager.getInstance().setRegisteredUsers(users);
+
+        LoginUserManager.getInstance().login("123-1234", "123");
+        outputStream.reset();
+        userInteractionAgent.showMainMenu();
+        assertTrue(outputStream.toString().contains("checkout"));
+    }
+
+    @Test
+    public void hideCommandsDependingOnRole() throws Exception {
+        List<Command> availableCommands = new ArrayList<Command>();
+        availableCommands.add(new CheckOutLibraryItemCommand());
+        availableCommands.add(new ListLibraryItemCommand());
+        availableCommands.add(new LoginUserCommand());
+        availableCommands.add(new WhoCheckedItemCommand());
+        userInteractionAgent.setAvailableCommands(availableCommands);
+
+        LoginUserManager.getInstance().logout();
+
+        ArrayList<UserRole> userRoles = new ArrayList<>();
+        userRoles.add(UserRole.CUSTOMER);
+        ArrayList<User> users = new ArrayList<>();
+        User testingUser = new User("123-1234", "123", new UserProfile(), userRoles);
+        users.add(testingUser);
+        LoginUserManager.getInstance().setRegisteredUsers(users);
+
+        LoginUserManager.getInstance().login("123-1234", "123");
+        outputStream.reset();
+        userInteractionAgent.showMainMenu();
+        assertFalse(outputStream.toString().contains("whoCheckedBook"));
+
+        testingUser.getUserRoles().add(UserRole.LIBRARIAN);
+        outputStream.reset();
+        userInteractionAgent.showMainMenu();
+        assertTrue(outputStream.toString().contains("whoCheckedBook"));
     }
 }

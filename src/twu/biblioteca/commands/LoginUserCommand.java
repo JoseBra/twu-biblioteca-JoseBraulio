@@ -2,12 +2,14 @@ package twu.biblioteca.commands;
 
 import twu.biblioteca.agents.LoginUserManager;
 import twu.biblioteca.environment.Library;
+import twu.biblioteca.environment.UserRole;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class LoginUserCommand extends Command{
     public LoginUserCommand() {
-        super("/login [Username] - Begins the process for login into the system.", false);
+        super("/login [Username] - Begins the process for login into the system.", false, UserRole.CUSTOMER);
     }
 
     @Override

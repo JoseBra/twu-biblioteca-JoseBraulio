@@ -1,11 +1,12 @@
 package twu.biblioteca.commands;
 
 import twu.biblioteca.environment.Library;
+import twu.biblioteca.environment.UserRole;
 
 public class QuitCommand extends Command{
 
     public QuitCommand() {
-        super("/quit  -  Close Biblioteca system.", false);
+        super("/quit  -  Close Biblioteca system.", false, UserRole.CUSTOMER);
     }
 
     @Override

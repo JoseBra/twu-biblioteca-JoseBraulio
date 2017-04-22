@@ -1,18 +1,17 @@
 package twu.biblioteca.commands;
 
 import twu.biblioteca.agents.LoginUserManager;
-import twu.biblioteca.environment.Book;
-import twu.biblioteca.environment.Library;
-import twu.biblioteca.environment.LibraryItem;
-import twu.biblioteca.environment.Movie;
+import twu.biblioteca.environment.*;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class CheckOutLibraryItemCommand extends Command{
 
     public CheckOutLibraryItemCommand() {
         super("/checkoutBook [ISBN code]  -  Checks out the book with it's ISBN Code.\n" +
-                "\t/checkoutMovie [MovieID code]  -  Checks out the movie with it's ID Code.", true);
+                "\t/checkoutMovie [MovieID code]  -  Checks out the movie with it's ID Code.",
+                true, UserRole.CUSTOMER);
     }
 
     @Override
@@ -21,7 +20,8 @@ public class CheckOutLibraryItemCommand extends Command{
                                         .stream()
                                         .filter(li -> li.getClass().equals(targetClass) && !li.isCheckedOut())
                                         .collect(Collectors.toList())){
-                return checkOutLibraryItem(libraryItem);
+                if (libraryItem.getClass().equals(Book.class) && ((Book)libraryItem).getISBN() == Integer.valueOf(arguments)
+                    || libraryItem.getClass().equals(Movie.class) && ((Movie)libraryItem).getMovieID() == Integer.valueOf(arguments)) return checkOutLibraryItem(libraryItem);
         }
         return messageItemNotAvailable(targetClass);
     }

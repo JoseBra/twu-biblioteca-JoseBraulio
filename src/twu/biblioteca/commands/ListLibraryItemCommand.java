@@ -1,17 +1,15 @@
 package twu.biblioteca.commands;
 
-import twu.biblioteca.environment.Book;
-import twu.biblioteca.environment.Library;
-import twu.biblioteca.environment.LibraryItem;
-import twu.biblioteca.environment.Movie;
+import twu.biblioteca.environment.*;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class ListLibraryItemCommand extends Command{
 
     public ListLibraryItemCommand() {
         super("/listBooks  -  List all available books.\n" +
-                "\t/listMovies - List all available movies.", false);
+                "\t/listMovies - List all available movies.", false, UserRole.CUSTOMER);
     }
 
     @Override

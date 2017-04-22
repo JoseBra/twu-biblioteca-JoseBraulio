@@ -20,7 +20,7 @@ public class CommandsTest {
         loginUserManager = LoginUserManager.getInstance();
 
         ArrayList<User> registeredUsers = new ArrayList<>();
-        registeredUsers.add(new User("123-1234", "123", new UserProfile()));
+        registeredUsers.add(new User("123-1234", "123", new UserProfile(), null));
         loginUserManager.setRegisteredUsers(registeredUsers);
         loginUserManager.login("123-1234", "123");
     }
@@ -173,5 +173,22 @@ public class CommandsTest {
         checkOutLibraryItemCommand.execute(library, "2", Book.class);
         returnLibraryItemCommand.execute(library, "1", Book.class);
         assertEquals(loginUserManager.getLoggedUser().getCheckedOutItems().size(), 1);
+    }
+
+    @Test
+    public void findWhoCheckedOutAnItem() throws Exception {
+        WhoCheckedItemCommand whoCheckedItemCommand = new WhoCheckedItemCommand();
+        CheckOutLibraryItemCommand checkOutLibraryItemCommand = new CheckOutLibraryItemCommand();
+        ArrayList<LibraryItem> bookLibraryList = new ArrayList<>();
+        bookLibraryList.add(new Book(1, "1984", "George Orwell", new SimpleDateFormat("dd/MM/yyyy").parse("08/06/1949")));
+        Library library = new Library("LibraryMock", bookLibraryList);
+        loginUserManager.login("123-1234", "123");
+
+
+        checkOutLibraryItemCommand.execute(library, "0", Book.class);
+        assertEquals("No user has checked out this item.", whoCheckedItemCommand.execute(library, "1", Book.class));
+
+        checkOutLibraryItemCommand.execute(library, "1", Book.class);
+        assertEquals("123-1234", whoCheckedItemCommand.execute(library, "1", Book.class));
     }
 }

@@ -51,4 +51,8 @@ public class LoginUserManager {
     public boolean isUserLogged() {
         return !(this.loggedUser == null);
     }
+
+    public List<User> getRegisteredUsers() {
+        return registeredUsers;
+    }
 }

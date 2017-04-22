@@ -14,7 +14,9 @@ public enum ConsoleInputParser {
     CHECKOUT_MOVIE("/checkoutMovie", CheckOutLibraryItemCommand.class, Movie.class),
     RETURN_BOOK("/returnBook", ReturnLibraryItemCommand.class, Book.class),
     QUIT("/quit", QuitCommand.class, null),
-    LOGIN("/login", LoginUserCommand.class, null);
+    LOGIN("/login", LoginUserCommand.class, null),
+    WHO_CHECKED_BOOK("/whoCheckedBook", WhoCheckedItemCommand.class, Book.class),
+    WHO_CHECKED_MOVIE("/whoCheckedMovie", WhoCheckedItemCommand.class, Movie.class);
 
     private final String value;
     private final Map.Entry<Class, Class> commandAndTargetClass;

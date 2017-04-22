@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import twu.biblioteca.environment.User;
 import twu.biblioteca.environment.UserProfile;
+import twu.biblioteca.environment.UserRole;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class LoginUserManagerTest {
         loginUserManager = LoginUserManager.getInstance();
 
         ArrayList<User> registeredUsers = new ArrayList<>();
-        registeredUsers.add(new User("123", "123", new UserProfile()));
+        registeredUsers.add(new User("123", "123", new UserProfile(), null));
         loginUserManager.setRegisteredUsers(registeredUsers);
 
     }

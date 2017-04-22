@@ -1,18 +1,16 @@
 package twu.biblioteca.commands;
 
 import twu.biblioteca.agents.LoginUserManager;
-import twu.biblioteca.environment.Book;
-import twu.biblioteca.environment.Library;
-import twu.biblioteca.environment.LibraryItem;
-import twu.biblioteca.environment.Movie;
+import twu.biblioteca.environment.*;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class ReturnLibraryItemCommand extends Command{
 
     public ReturnLibraryItemCommand() {
         super("/return [ISBN code]  -  Returns the book with it's ISBN Code so it's available again.\n" +
-                "\t/return [MovieID code]  -  Returns the movie with it's Movie ID Code so it's available again.", true);
+                "\t/return [MovieID code]  -  Returns the movie with it's Movie ID Code so it's available again.", true, UserRole.CUSTOMER);
     }
 
     @Override
@@ -21,7 +19,8 @@ public class ReturnLibraryItemCommand extends Command{
                                         .stream()
                                         .filter(li -> li.getClass().equals(targetClass) && li.isCheckedOut())
                                         .collect(Collectors.toList())){
-            return returnLibraryItem(libraryItem);
+            if (libraryItem.getClass().equals(Book.class) && ((Book)libraryItem).getISBN() == Integer.valueOf(arguments)
+                    || libraryItem.getClass().equals(Movie.class) && ((Movie)libraryItem).getMovieID() == Integer.valueOf(arguments)) return returnLibraryItem(libraryItem);
         }
         return messageItemNotReturned(targetClass);
     }
